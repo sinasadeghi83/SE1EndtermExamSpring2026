@@ -1,0 +1,73 @@
+services:
+  app:
+    build: .
+    container_name: redbank-app
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    environment:
+      APP_SECRET_KEY: 7a7e6931749c4f30b4e9aadfecf28769207c8aa4597462c8d014ade11b8548be
+      EDGES_CONNECT_SERVER_HOST: 0.0.0.0
+      EDGES_CONNECT_SERVER_PORT: "8989"
+      INFRAS_POSTGRES_USER: postgres
+      INFRAS_POSTGRES_PASSWORD: postgres
+      INFRAS_POSTGRES_DB_NAME: redbank
+      INFRAS_POSTGRES_HOST: postgres
+      INFRAS_POSTGRES_PORT: "5432"
+      INFRAS_POSTGRES_SSLMODE: disable
+      INFRAS_REDIS_HOST: redis
+      INFRAS_REDIS_PORT: "6379"
+      INFRAS_REDIS_USERNAME: default
+      INFRAS_REDIS_PASSWORD: 1234
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - redbank
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: redbank-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: redbank
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d redbank"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - redbank
+
+  redis:
+    image: redis:7-alpine
+    container_name: redbank-redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "1234"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "1234", "--no-auth-warning", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - redbank
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  redbank:
+    driver: bridge
