@@ -1,0 +1,29 @@
+{
+  "app": {
+    "secret_key": "7a7e6931749c4f30b4e9aadfecf28769207c8aa4597462c8d014ade11b8548be"
+  },
+  "edges": {
+    "connect": {
+      "server": {
+        "host": "0.0.0.0",
+        "port": "8989"
+      }
+    }
+  },
+  "infras": {
+    "postgres": {
+      "user": "postgres",
+      "password": "postgres",
+      "db_name": "redbank",
+      "host": "127.0.0.1",
+      "port": "5432",
+      "sslmode": "disable"
+    },
+    "redis": {
+      "host": "127.0.0.1",
+      "port": 6379,
+      "username": "default",
+      "password": "1234"
+    }
+  }
+}
