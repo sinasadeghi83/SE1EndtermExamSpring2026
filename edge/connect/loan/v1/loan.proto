@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package loan_v_1;
+
+option go_package = "redbank/edge/connect/gen/loan/v1;loanv1";
+
+service Service {
+  rpc Health(HealthRequest) returns (HealthResponse) {
+  }
+
+  rpc ApplyLoan(ApplyLoanRequest) returns (ApplyLoanResponse) {
+  }
+
+  rpc EvaluateLoan(EvaluateLoanRequest) returns (EvaluateLoanResponse) {
+  }
+
+  rpc GetLoan(GetLoanRequest) returns (GetLoanResponse) {
+  }
+
+  rpc ListLoansByAccount(ListLoansByAccountRequest) returns (ListLoansByAccountResponse) {
+  }
+  // @ahum: methods
+}
+
+message HealthRequest {
+}
+
+message HealthResponse {
+  string message = 1;
+}
+
+message Loan {
+  string id = 1;
+  string account_id = 2;
+  int64 principal = 3;
+  double interest_rate = 4;
+  int32 term_months = 5;
+  string status = 6;
+}
+
+message ApplyLoanRequest {
+  string account_id = 1;
+  int64 principal = 2;
+  double interest_rate = 3;
+  int32 term_months = 4;
+  int32 credit_score = 5;
+  int64 monthly_income = 6;
+  int64 existing_debt = 7;
+}
+
+message ApplyLoanResponse {
+  Loan loan = 1;
+}
+
+message EvaluateLoanRequest {
+  string id = 1;
+}
+
+message EvaluateLoanResponse {
+  bool approved = 1;
+  double score = 2;
+  string reason = 3;
+}
+
+message GetLoanRequest {
+  string id = 1;
+}
+
+message GetLoanResponse {
+  Loan loan = 1;
+}
+
+message ListLoansByAccountRequest {
+  string account_id = 1;
+}
+
+message ListLoansByAccountResponse {
+  repeated Loan loans = 1;
+}
+// @ahum: messages
