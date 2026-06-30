@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package account_v_1;
+
+option go_package = "redbank/edge/connect/gen/account/v1;accountv1";
+
+service Service {
+  rpc Health(HealthRequest) returns (HealthResponse) {
+  }
+
+  rpc OpenAccount(OpenAccountRequest) returns (OpenAccountResponse) {
+  }
+
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {
+  }
+
+  rpc ListAccountsByOwner(ListAccountsByOwnerRequest) returns (ListAccountsByOwnerResponse) {
+  }
+
+  rpc CloseAccount(CloseAccountRequest) returns (CloseAccountResponse) {
+  }
+  // @ahum: methods
+}
+
+message HealthRequest {
+}
+
+message HealthResponse {
+  string message = 1;
+}
+
+message Account {
+  string id = 1;
+  string owner_id = 2;
+  string type = 3;
+  string currency = 4;
+  int64 balance = 5;
+  string status = 6;
+}
+
+message OpenAccountRequest {
+  string owner_id = 1;
+  string type = 2;
+  string currency = 3;
+}
+
+message OpenAccountResponse {
+  Account account = 1;
+}
+
+message GetAccountRequest {
+  string id = 1;
+}
+
+message GetAccountResponse {
+  Account account = 1;
+}
+
+message ListAccountsByOwnerRequest {
+  string owner_id = 1;
+}
+
+message ListAccountsByOwnerResponse {
+  repeated Account accounts = 1;
+}
+
+message CloseAccountRequest {
+  string id = 1;
+}
+
+message CloseAccountResponse {
+  bool success = 1;
+}
+// @ahum: messages
